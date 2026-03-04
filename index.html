@@ -9,6 +9,7 @@ body{font-family:Arial;margin:0;background:#f4f6f9;}
 header{background:#2e7d32;color:white;padding:20px;text-align:center;}
 .container{max-width:1100px;margin:40px auto;padding:20px;}
 .card{background:white;padding:25px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.1);}
+.info-box{background:#e8f5e9;padding:15px;border-radius:8px;margin-bottom:20px;font-weight:bold;}
 table{width:100%;border-collapse:collapse;margin-top:20px;}
 th{background:#2e7d32;color:white;padding:10px;}
 td{padding:8px;text-align:center;border-bottom:1px solid #ddd;}
@@ -31,14 +32,17 @@ footer{text-align:center;background:#2e7d32;color:white;padding:15px;margin-top:
 <div class="container">
 <div class="card">
 
+<div class="info-box">
+📅 Tanggal: <span id="tanggal"></span><br>
+📍 Lokasi: <span id="lokasi"></span>
+</div>
+
 <h3>Informasi Stok Komoditas</h3>
 
 <table id="data-table">
 <thead>
 <tr>
 <th>No</th>
-<th>Tanggal</th>
-<th>Lokasi</th>
 <th>Komoditas</th>
 <th>Harga</th>
 <th>Stok Awal</th>
@@ -67,6 +71,12 @@ fetch(sheetURL)
 const rows = data.split("\n").slice(1);
 const tableBody = document.querySelector("#data-table tbody");
 
+if(rows.length > 0){
+const firstRow = rows[0].split(",");
+document.getElementById("tanggal").innerText = firstRow[0];
+document.getElementById("lokasi").innerText = firstRow[1];
+}
+
 rows.forEach((row, index) => {
 
 const cols = row.split(",");
@@ -86,8 +96,6 @@ const tr=document.createElement("tr");
 
 tr.innerHTML=`
 <td>${index+1}</td>
-<td>${cols[0]}</td>
-<td>${cols[1]}</td>
 <td>${cols[2]}</td>
 <td>Rp ${cols[3]}</td>
 <td>${cols[4]}</td>
