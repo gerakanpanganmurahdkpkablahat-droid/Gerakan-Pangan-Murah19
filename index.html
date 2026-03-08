@@ -2,107 +2,89 @@
 <html>
 <head>
 <meta charset="UTF-8">
-
 <title>SIP-STOK GPM - Kabupaten Lahat</title>
 
 <style>
 
 body{
-    font-family: Arial;
-    margin:0;
-    background:#f4f6f9;
+font-family: Arial;
+margin:0;
+background:#e6e8eb;
 }
 
-/* HEADER */
 header{
-    text-align:center;
-    padding:25px;
-    background:#2e7d32;
-    color:white;
+background:#2e7d32;
+color:white;
+text-align:center;
+padding:70px 20px;
 }
 
 header img{
-    height:100px;
-    margin-bottom:15px;
+height:110px;
+margin-bottom:20px;
 }
 
-/* CONTAINER */
+header h1{
+font-size:40px;
+margin:10px 0;
+}
+
+header p{
+font-size:20px;
+margin:6px 0;
+}
+
 .container{
-    max-width:1100px;
-    margin:40px auto;
-    padding:20px;
+max-width:1050px;
+margin:40px auto;
+padding:20px;
 }
 
 .card{
-    background:white;
-    padding:25px;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.1);
+background:white;
+padding:35px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
 }
 
-/* INFO BOX */
 .info-box{
-    background:#e8f5e9;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:20px;
-    font-weight:bold;
-    font-size:16px;
+background:#dfe8df;
+padding:18px;
+border-radius:12px;
+margin-bottom:30px;
+font-size:20px;
+font-weight:bold;
 }
 
-/* TABLE */
 table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:20px;
+width:100%;
+border-collapse:collapse;
 }
 
 th{
-    background:#2e7d32;
-    color:white;
-    padding:10px;
+background:#2e7d32;
+color:white;
+padding:12px;
 }
 
 td{
-    padding:8px;
-    text-align:center;
-    border-bottom:1px solid #ddd;
+padding:12px;
+text-align:center;
+border-bottom:1px solid #ddd;
 }
 
-tr:hover{
-    background:#f1f1f1;
-}
-
-/* STATUS WARNA */
 .status-tersedia{
-    background:#00e676;
-    padding:4px 8px;
-    border-radius:6px;
-    font-weight:bold;
+background:#00e676;
+padding:6px 12px;
+border-radius:8px;
+font-weight:bold;
 }
 
 .status-menipis{
-    background:#ffea00;
-    padding:4px 8px;
-    border-radius:6px;
-    font-weight:bold;
-}
-
-.status-habis{
-    background:#ff1744;
-    color:white;
-    padding:4px 8px;
-    border-radius:6px;
-    font-weight:bold;
-}
-
-/* FOOTER */
-footer{
-    text-align:center;
-    background:#2e7d32;
-    color:white;
-    padding:15px;
-    margin-top:40px;
+background:#ffeb3b;
+padding:6px 12px;
+border-radius:8px;
+font-weight:bold;
 }
 
 </style>
@@ -112,9 +94,9 @@ footer{
 
 <header>
 
-<img src="Lambang_Kabupaten_Lahat.jpg" alt="Lambang Kabupaten Lahat">
+<img src="Lambang_Kabupaten_Lahat.jpg">
 
-<h2>SIP-STOK GPM</h2>
+<h1>SIP-STOK GPM</h1>
 <p>Sistem Informasi Publikasi Stok Gerakan Pangan Murah</p>
 <p>Pemerintah Kabupaten Lahat</p>
 
@@ -125,23 +107,76 @@ footer{
 <div class="card">
 
 <div class="info-box">
-Update data stok pangan kegiatan Gerakan Pangan Murah Kabupaten Lahat
-</div>
 
-<iframe 
-src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTviJa9SgFG_sLUgGDD0Ot4zc7Qe3peBMRzPUpDUWeXP3yTKjw4Kjut35gdhX7XzNBjvK80KkTGiewR/pubhtml"
-width="100%"
-height="600"
-style="border:none;">
-</iframe>
+📅 Tanggal: <span id="tanggal">Loading...</span><br>
+📍 Lokasi: <span id="lokasi">Loading...</span>
 
 </div>
 
+<h2>Informasi Stok Komoditas</h2>
+
+<table id="tabel">
+
+<thead>
+<tr>
+<th>No</th>
+<th>Komoditas</th>
+<th>Harga</th>
+<th>Stok Awal</th>
+<th>Terjual</th>
+<th>Sisa</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody></tbody>
+
+</table>
+
 </div>
 
-<footer>
-SIP-STOK GPM © Pemerintah Kabupaten Lahat
-</footer>
+</div>
+
+<script>
+
+const sheetURL = "https://docs.google.com/spreadsheets/d/1MGhBSK0F9Xk0r7tIGkxUT3IzkMaUEA0aeLL5xgyGUl8/export?format=csv";
+
+fetch(sheetURL)
+.then(res => res.text())
+.then(data => {
+
+let rows = data.split("\n").slice(1);
+
+let tabel = document.querySelector("#tabel tbody");
+
+rows.forEach((row,i)=>{
+
+let cols = row.split(",");
+
+if(i==0){
+document.getElementById("tanggal").innerText = cols[0];
+document.getElementById("lokasi").innerText = cols[1];
+}
+
+let statusClass = cols[7]=="Menipis" ? "status-menipis" : "status-tersedia";
+
+tabel.innerHTML += `
+<tr>
+<td>${i+1}</td>
+<td>${cols[2]}</td>
+<td>Rp ${cols[3]}</td>
+<td>${cols[4]}</td>
+<td>${cols[5]}</td>
+<td>${cols[6]}</td>
+<td><span class="${statusClass}">${cols[7]}</span></td>
+</tr>
+`;
+
+});
+
+});
+
+</script>
 
 </body>
 </html>
