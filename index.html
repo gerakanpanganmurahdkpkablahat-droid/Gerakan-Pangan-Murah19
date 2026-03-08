@@ -1,8 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>SIP-STOK GPM</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SEMD8BW957"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-SEMD8BW957');
+</script>
 
 <style>
 
@@ -12,7 +24,7 @@ margin:0;
 background:#e9ecef;
 }
 
-/* HEADER BESAR */
+/* HEADER */
 
 header{
 background:#2e7d32;
@@ -44,7 +56,7 @@ margin:50px auto;
 padding:20px;
 }
 
-/* CARD PUTIH */
+/* CARD */
 
 .card{
 background:white;
@@ -53,7 +65,7 @@ border-radius:20px;
 box-shadow:0 15px 40px rgba(0,0,0,0.2);
 }
 
-/* BOX TANGGAL */
+/* INFO BOX */
 
 .info{
 background:#dfe8df;
@@ -90,7 +102,7 @@ text-align:center;
 border-bottom:1px solid #ddd;
 }
 
-/* STATUS */
+/* STATUS WARNA */
 
 .tersedia{
 background:#00e676;
@@ -127,6 +139,7 @@ color:#555;
 </style>
 </head>
 
+
 <body>
 
 <header>
@@ -140,6 +153,7 @@ color:#555;
 
 </header>
 
+
 <div class="container">
 
 <div class="card">
@@ -150,6 +164,7 @@ color:#555;
 📍 Lokasi : <span id="lokasi">Loading...</span>
 
 </div>
+
 
 <h2>Informasi Stok Komoditas</h2>
 
@@ -175,9 +190,11 @@ color:#555;
 
 </div>
 
+
 <footer>
 © 2026 Dinas Ketahanan Pangan Kabupaten Lahat
 </footer>
+
 
 <script>
 
@@ -185,19 +202,19 @@ const sheetURL =
 "https://docs.google.com/spreadsheets/d/1MGhBSK0F9Xk0r7tIGkxUT3IzkMaUEA0aeLL5xgyGUl8/export?format=csv";
 
 fetch(sheetURL)
-.then(res=>res.text())
-.then(data=>{
+.then(res => res.text())
+.then(data => {
 
-let rows=data.split("\n").slice(1);
-let tabel=document.querySelector("#tabel tbody");
+let rows = data.split("\n").slice(1);
+let tabel = document.querySelector("#tabel tbody");
 
 rows.forEach((row,i)=>{
 
-let col=row.split(",");
+let col = row.split(",");
 
 if(i==0){
-document.getElementById("tanggal").innerText=col[0];
-document.getElementById("lokasi").innerText=col[1];
+document.getElementById("tanggal").innerText = col[0];
+document.getElementById("lokasi").innerText = col[1];
 }
 
 let statusText = col[7].trim().toLowerCase();
@@ -206,7 +223,7 @@ let status = "tersedia";
 if(statusText=="menipis") status="menipis";
 if(statusText=="habis") status="habis";
 
-tabel.innerHTML+=`
+tabel.innerHTML += `
 <tr>
 <td>${i+1}</td>
 <td>${col[2]}</td>
